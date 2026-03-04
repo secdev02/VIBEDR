@@ -1,0 +1,89 @@
+# MinimalEDR Configuration File
+# Place at: C:\ProgramData\MinimalEDR\config.ini
+
+[General]
+# Enable/disable specific monitoring features
+TrackProcesses=true
+TrackNetwork=true
+TrackDns=true
+TrackCrossProcess=true
+
+[Queue]
+# Maximum number of events in kernel queue before dropping
+MaxQueueSize=10000
+
+[Batch]
+# Number of events per batch before upload
+BatchSize=100
+# Timeout in seconds before uploading incomplete batch
+BatchTimeout=30
+
+[Storage]
+# Local log file path
+LogPath=C:\ProgramData\MinimalEDR\events.log
+# Enable local logging
+EnableLocalLog=true
+# Enable S3 upload
+EnableS3Upload=false
+# Enable database upload
+EnableDatabase=false
+
+[S3]
+# S3 bucket configuration
+BucketName=your-edr-bucket
+Region=us-east-1
+# Credentials (recommend using IAM roles instead)
+AccessKeyId=
+SecretAccessKey=
+# Prefix for uploaded files
+KeyPrefix=edr-events/
+
+[Database]
+# Database configuration
+Type=sqlserver
+# SQL Server connection string
+ConnectionString=Server=localhost;Database=EDR;Trusted_Connection=True;
+# Table name for events
+TableName=Events
+
+[Filtering]
+# Process filtering (comma-separated)
+ExcludeProcesses=System,svchost.exe,lsass.exe
+# Network filtering
+ExcludeLocalhost=true
+ExcludePorts=135,137,138,139,445
+# IP filtering (CIDR notation)
+ExcludeNetworks=169.254.0.0/16,224.0.0.0/4
+
+[Performance]
+# CPU throttling
+MaxCpuPercent=5
+# Memory limits (MB)
+MaxMemoryMB=100
+# Event rate limiting (events per second)
+MaxEventsPerSecond=1000
+
+[Security]
+# Require signature verification for monitored processes
+RequireSignedProcesses=false
+# Monitor only specific directories
+MonitoredDirectories=C:\Users,C:\Temp
+# Exclude trusted directories
+ExcludedDirectories=C:\Windows\System32,C:\Program Files
+
+[Alerting]
+# Enable real-time alerting
+EnableAlerts=false
+# Webhook URL for alerts
+WebhookUrl=https://your-siem.com/webhook
+# Alert on suspicious activity
+AlertOnUnsignedProcess=false
+AlertOnCrossProcessWrite=true
+AlertOnNetworkToSuspiciousIP=true
+AlertOnDnsToSuspiciousDomain=true
+
+[Logging]
+# Service log level (ERROR, WARN, INFO, DEBUG)
+LogLevel=INFO
+# Service log path
+ServiceLogPath=C:\ProgramData\MinimalEDR\service.log
